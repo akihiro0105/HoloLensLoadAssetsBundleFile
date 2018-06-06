@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 40586854
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: pari
+      Dependencies: {}
