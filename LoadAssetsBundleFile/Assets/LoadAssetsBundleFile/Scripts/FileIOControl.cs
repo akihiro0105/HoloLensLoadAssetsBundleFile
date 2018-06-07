@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using System.Threading;
 #if UNITY_UWP
+using System.Threading.Tasks;
 #elif UNITY_EDITOR || UNITY_STANDALONE
 #endif
 
@@ -41,43 +42,97 @@ namespace LoadAssetsBundleFile
         public static IEnumerator ReadTextFile(string name,Action<string> action)
         {
             string data = null;
+#if UNITY_UWP
+            Task task = Task.Run(() =>
+            {
+                if (File.Exists(name))
+                {
+                    data = File.ReadAllText(name);
+                }
+            });
+            yield return new WaitWhile(() => task.IsCompleted == false);
+#elif UNITY_EDITOR || UNITY_STANDALONE
             Thread thread = new Thread(() => {
-                data = File.ReadAllText(name);
+                if (File.Exists(name))
+                {
+                    data = File.ReadAllText(name);
+                }
             });
             thread.Start();
             yield return new WaitWhile(() => thread.IsAlive == true);
+#endif
+            yield return null;
             action.Invoke(data);
         }
 
         public static IEnumerator ReadBytesFile(string name, Action<byte[]> action)
         {
             byte[] data = null;
+#if UNITY_UWP
+            Task task = Task.Run(() =>
+              {
+                  if (File.Exists(name))
+                  {
+                      data = File.ReadAllBytes(name);
+                  }
+              });
+            yield return new WaitWhile(() => task.IsCompleted == false);
+#elif UNITY_EDITOR || UNITY_STANDALONE
             Thread thread = new Thread(() => {
-                data = File.ReadAllBytes(name);
+                if (File.Exists(name))
+                {
+                    data = File.ReadAllBytes(name);
+                }
             });
             thread.Start();
             yield return new WaitWhile(() => thread.IsAlive == true);
+#endif
+            yield return null;
             action.Invoke(data);
         }
 
         // Write
         public static IEnumerator WriteTextFile(string name,string data,Action action = null)
         {
+#if UNITY_UWP
+            Task task = Task.Run(() =>
+            {
+                if (File.Exists(name))
+                {
+                    File.WriteAllText(name, data);
+                }
+            });
+            yield return new WaitWhile(() => task.IsCompleted == false);
+#elif UNITY_EDITOR || UNITY_STANDALONE
             Thread thread = new Thread(() => {
                 File.WriteAllText(name, data);
             });
             thread.Start();
             yield return new WaitWhile(() => thread.IsAlive == true);
+#endif
+            yield return null;
             if (action != null) action.Invoke();
         }
 
         public static IEnumerator WriteBytesFile(string name, byte[] data, Action action = null)
         {
+#if UNITY_UWP
+            Task task = Task.Run(() =>
+            {
+                if (File.Exists(name))
+                {
+                    File.WriteAllBytes(name, data);
+                }
+            });
+            yield return new WaitWhile(() => task.IsCompleted == false);
+#elif UNITY_EDITOR || UNITY_STANDALONE
             Thread thread = new Thread(()=> {
                 File.WriteAllBytes(name, data);
             });
             thread.Start();
             yield return new WaitWhile(() => thread.IsAlive == true);
+#endif
+            yield return null;
             if (action != null) action.Invoke();
         }
 
