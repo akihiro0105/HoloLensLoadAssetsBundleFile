@@ -7,7 +7,7 @@ namespace LoadAssetsBundleFile
 {
     public class AssetBundleLoader
     {
-        public IEnumerator AssetBundleFile<T>(string name, string[] assets,Action<T[]> action, Action<float> progress=null) where T : UnityEngine.Object
+        public static IEnumerator AssetBundleFile<T>(string name, string[] assets,Action<T[]> action, Action<float> progress=null) where T : UnityEngine.Object
         {
             byte[] data = null;
             Debug.Log("Load File");
@@ -17,7 +17,7 @@ namespace LoadAssetsBundleFile
             Debug.Log("Load Complete");
         }
 
-        public IEnumerator AssetBundleData<T>(byte[] data, string[] assets, Action<T[]> action, Action<float> progress=null) where T : UnityEngine.Object
+        private static IEnumerator AssetBundleData<T>(byte[] data, string[] assets, Action<T[]> action, Action<float> progress=null) where T : UnityEngine.Object
         {
             AssetBundle assetBundle = null;
             // Load AssetBundle
@@ -39,7 +39,7 @@ namespace LoadAssetsBundleFile
             if (assetBundle != null) assetBundle.Unload(false);
         }
 
-        private IEnumerator LoadAsset<T>(AssetBundle assetbundle, string name, Action<T> action, Action<float> progress = null) where T : UnityEngine.Object
+        private static IEnumerator LoadAsset<T>(AssetBundle assetbundle, string name, Action<T> action, Action<float> progress = null) where T : UnityEngine.Object
         {
             var obj = assetbundle.LoadAssetAsync<T>(name);
             while (!obj.isDone)
