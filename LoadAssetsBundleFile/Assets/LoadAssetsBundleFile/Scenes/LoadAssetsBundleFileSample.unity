@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a5baacb111f4641bed5807ba132368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetbundleName: pari
+  assetbundleName: sample
   assetName:
-  - Paris2010_0
+  - root
 --- !u!4 &1197613323
 Transform:
   m_ObjectHideFlags: 0

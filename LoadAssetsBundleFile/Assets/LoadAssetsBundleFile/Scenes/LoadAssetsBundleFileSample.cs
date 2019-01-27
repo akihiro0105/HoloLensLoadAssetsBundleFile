@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LoadAssetsBundleFile;
-using System;
+using HoloLensModule.Environment;
 
 public class LoadAssetsBundleFileSample : MonoBehaviour {
 
-    public string assetbundleName = "pari";
-    public string[] assetName = { "Paris2010_0" };
+    public string assetbundleName = "sample";
+    public string[] assetName = { "root" };
 
     // Use this for initialization
     void Start()
     {
         var path = FileIOControl.LocalFolderPath + "\\" + assetbundleName;
-        StartCoroutine(AssetBundleLoader.AssetBundleFile<GameObject>(path, assetName, LoadCompleted, (p) => { Debug.Log((int)(p * 100)); }));
-    }
-
-    private void LoadCompleted(GameObject[] obj)
-    {
-        if (obj.Length > 0) Instantiate(obj[0]);
+        StartCoroutine(AssetBundleLoader.AssetBundleFile<GameObject>(path, assetName, (obj) =>
+        {
+            for (var i = 0; i < obj.Length; i++) Instantiate(obj[i]);
+        }, (p) => Debug.Log((int) (p * 100))));
     }
 }
